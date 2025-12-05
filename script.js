@@ -37,6 +37,7 @@
   let dir = { x: 1, y: 0 };
   let nextDir = { x: 1, y: 0 };
   let food = null;
+  let obstacles = []; // Buissons/obstacles
   let score = 0;
   let running = false;
   let paused = false;
@@ -68,12 +69,42 @@
     updateSpeedLabel();
   });
 
+  // Generate obstacles (bushes)
+  function generateObstacles() {
+    obstacles = [];
+    const numObstacles = Math.floor((cols * rows) * 0.08); // 8% du terrain
+    
+    for (let i = 0; i < numObstacles; i++) {
+      let x, y, valid;
+      let attempts = 0;
+      
+      do {
+        x = Math.floor(Math.random() * cols);
+        y = Math.floor(Math.random() * rows);
+        
+        // Vérifier que ce n'est pas au centre (position de départ du serpent)
+        const centerX = Math.floor(cols / 2);
+        const centerY = Math.floor(rows / 2);
+        const distFromCenter = Math.abs(x - centerX) + Math.abs(y - centerY);
+        
+        valid = distFromCenter > 3 && 
+                !obstacles.some(o => o.x === x && o.y === y);
+        attempts++;
+      } while (!valid && attempts < 50);
+      
+      if (valid) {
+        obstacles.push({ x, y });
+      }
+    }
+  }
+
   // Spawn food at random location
   function spawnFood() {
     while (true) {
       const x = Math.floor(Math.random() * cols);
       const y = Math.floor(Math.random() * rows);
-      if (!snake.some(s => s.x === x && s.y === y)) {
+      if (!snake.some(s => s.x === x && s.y === y) && 
+          !obstacles.some(o => o.x === x && o.y === y)) {
         food = { x, y };
         break;
       }
@@ -86,6 +117,7 @@
     dir = { x: 1, y: 0 };
     nextDir = { x: 1, y: 0 };
     food = null;
+    generateObstacles(); // Générer les obstacles
     spawnFood();
     score = 0;
     scoreEl.textContent = score;
@@ -266,6 +298,37 @@
       ctx.lineTo(W, y);
       ctx.stroke();
     }
+
+    // Draw obstacles (buissons)
+    ctx.fillStyle = '#b8e6b8'; // Vert pastel
+    obstacles.forEach(obs => {
+      const ox = obs.x * gridSize;
+      const oy = obs.y * gridSize;
+      const cx = ox + gridSize / 2;
+      const cy = oy + gridSize / 2;
+      const radius = gridSize * 0.4;
+
+      // Dessiner 3 cercles pour faire un buisson
+      ctx.beginPath();
+      ctx.arc(cx - radius * 0.4, cy, radius * 0.7, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.beginPath();
+      ctx.arc(cx + radius * 0.4, cy, radius * 0.7, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.beginPath();
+      ctx.arc(cx, cy - radius * 0.3, radius * 0.8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Ombre plus foncée pour le détail
+      ctx.fillStyle = '#a0d4a0';
+      ctx.beginPath();
+      ctx.arc(cx, cy + radius * 0.2, radius * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillStyle = '#b8e6b8'; // Restaurer la couleur
+    });
 
     // Draw food (pomme pastel)
     if (food) {
