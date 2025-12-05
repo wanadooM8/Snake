@@ -84,8 +84,8 @@ body {
 }
 
 #gameCanvas {
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   display: block;
   border-radius: 12px;
   background: #fffaf0;
