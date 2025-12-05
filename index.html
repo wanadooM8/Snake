@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🐍 Snake Mignon</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>🐍 Hidden Snake</h1>
+      <p class="subtitle">Un jeu de serpent caché</p>
+    </header>
+
+    <div class="main-content">
+      <div class="game-section">
+        <div class="game-container">
+          <canvas id="gameCanvas" width="400" height="400"></canvas>
+          <div class="game-overlay">
+            <div class="score-display">
+              <div class="score-item">
+                <span class="score-label">Score</span>
+                <span class="score-value" id="score">0</span>
+              </div>
+              <div class="score-item">
+                <span class="score-label">Meilleur</span>
+                <span class="score-value" id="best">0</span>
+              </div>
+            </div>
+          </div>
+          <div class="game-over-overlay" id="gameOverOverlay" style="display: none;">
+            <div class="game-over-message">
+              <h2>💀 Game Over!</h2>
+              <p>Score: <span id="finalScore">0</span></p>
+              <button class="btn btn-primary" id="restartGameBtn">🔄 Recommencer</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls-bottom">
+          <button class="btn btn-primary" id="startBtn">▶ Démarrer</button>
+          <button class="btn btn-secondary" id="restartBtn">🔄 Recommencer</button>
+          <button class="btn btn-secondary" id="pauseBtn">⏸ Pause</button>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="card settings-card">
+          <h2>⚙️ Paramètres</h2>
+          
+          <div class="setting">
+            <label for="difficulty">Difficulté</label>
+            <select id="difficulty">
+              <option value="0.9">🐢 Facile</option>
+              <option value="1.0" selected>🐇 Normal</option>
+              <option value="1.12">⚡ Rapide</option>
+              <option value="1.25">🔥 Furie</option>
+            </select>
+          </div>
+
+          <div class="setting">
+            <label for="gridRange">Taille: <span id="gridVal">20</span>px</label>
+            <input id="gridRange" type="range" min="12" max="36" value="20">
+          </div>
+
+          <div class="stat">
+            <span>Vitesse:</span>
+            <span id="speedLabel">Normal</span>
+          </div>
+        </div>
+
+        <div class="card info-card">
+          <h3>📖 Comment jouer</h3>
+          <ul class="info-list">
+            <li>⬅️ Flèches </li>
+            <li>🍎 Mange les pommes</li>
+            <li>🚫 Évite les murs</li>
+            <li>🐍 Évite toi-même</li>
+          </ul>
+        </div>
+
+        <div class="touch-pad" id="touchPad">
+          <button class="btn-arrow" id="up">▲</button>
+          <div class="arrow-row">
+            <button class="btn-arrow" id="left">◀</button>
+            <button class="btn-arrow" id="down">▼</button>
+            <button class="btn-arrow" id="right">▶</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="footer">
+      <p>Crée avec ❤️ - Meilleur score sauvegardé automatiquement</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
